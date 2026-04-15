@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guilherme Moret de Barros – Portfolio</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #13161e;
+      --bg3: #1a1e2a;
+      --accent: #4f8ef7;
+      --accent2: #7c3aed;
+      --accent-grad: linear-gradient(135deg, #4f8ef7, #7c3aed);
+      --text: #e2e8f0;
+      --muted: #8892a4;
+      --border: #1f2535;
+      --card: #161b27;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,15,20,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo {
+      font-weight: 700; font-size: 1rem; letter-spacing: .5px;
+      background: var(--accent-grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: .875rem;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 2rem; max-width: 1000px; margin: 0 auto; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding-top: 80px;
+    }
+    .hero-badge {
+      display: inline-block; margin-bottom: 1.2rem;
+      padding: .35rem .9rem; border-radius: 999px;
+      background: rgba(79,142,247,.12); border: 1px solid rgba(79,142,247,.3);
+      color: var(--accent); font-size: .8rem; font-weight: 600; letter-spacing: .5px;
+    }
+    .hero-name {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800; line-height: 1.1; margin-bottom: .6rem;
+    }
+    .hero-name span {
+      background: var(--accent-grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-title {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--muted); margin-bottom: 1.5rem; font-weight: 400;
+    }
+    .hero-desc {
+      max-width: 600px; color: #a0aec0; margin-bottom: 2.5rem; font-size: .97rem;
+    }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .7rem 1.6rem; border-radius: 8px; font-size: .9rem;
+      font-weight: 600; text-decoration: none; transition: all .2s; cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--accent-grad); color: #fff;
+      box-shadow: 0 4px 20px rgba(79,142,247,.3);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 28px rgba(79,142,247,.5); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+    .hero-contacts {
+      margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 1.2rem;
+    }
+    .contact-item {
+      display: flex; align-items: center; gap: .5rem;
+      color: var(--muted); font-size: .85rem; text-decoration: none;
+      transition: color .2s;
+    }
+    .contact-item:hover { color: var(--accent); }
+    .contact-item svg { flex-shrink: 0; }
+
+    /* ── SECTION HEADER ── */
+    .section-label {
+      display: flex; align-items: center; gap: .75rem;
+      margin-bottom: 2.5rem;
+    }
+    .section-label h2 { font-size: 1.7rem; font-weight: 700; }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── EXPERIENCE ── */
+    .timeline { display: flex; flex-direction: column; gap: 1.5rem; }
+    .timeline-item {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.6rem 1.8rem;
+      position: relative; transition: border-color .2s, transform .2s;
+    }
+    .timeline-item:hover { border-color: rgba(79,142,247,.4); transform: translateX(4px); }
+    .timeline-header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; margin-bottom: .8rem; }
+    .timeline-company { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    .timeline-role { color: var(--accent); font-size: .9rem; font-weight: 600; }
+    .timeline-period {
+      font-size: .8rem; color: var(--muted);
+      background: var(--bg3); padding: .25rem .75rem; border-radius: 999px;
+      height: fit-content;
+    }
+    .timeline-list { list-style: none; margin-top: .8rem; }
+    .timeline-list li {
+      color: #a0aec0; font-size: .9rem; padding: .25rem 0;
+      padding-left: 1.1rem; position: relative;
+    }
+    .timeline-list li::before {
+      content: '▸'; position: absolute; left: 0; color: var(--accent);
+    }
+    .timeline-highlight {
+      display: inline-block; margin-top: .6rem;
+      padding: .3rem .8rem; border-radius: 6px;
+      background: rgba(79,142,247,.1); border: 1px solid rgba(79,142,247,.2);
+      color: var(--accent); font-size: .8rem; font-weight: 600;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .skill-tag {
+      padding: .4rem 1rem; border-radius: 999px; font-size: .83rem; font-weight: 500;
+      border: 1px solid; transition: all .2s; cursor: default;
+    }
+    .skill-tag:hover { transform: translateY(-2px); }
+    .skill-data  { color: #4f8ef7; border-color: rgba(79,142,247,.35); background: rgba(79,142,247,.08); }
+    .skill-auto  { color: #a78bfa; border-color: rgba(167,139,250,.35); background: rgba(167,139,250,.08); }
+    .skill-tool  { color: #34d399; border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.08); }
+    .skill-lang  { color: #fb923c; border-color: rgba(251,146,60,.35); background: rgba(251,146,60,.08); }
+    .skill-mgmt  { color: #f472b6; border-color: rgba(244,114,182,.35); background: rgba(244,114,182,.08); }
+
+    .skills-legend { display: flex; flex-wrap: wrap; gap: .8rem; margin-bottom: 1.2rem; }
+    .legend-item { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: var(--muted); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ── PROJECTS ── */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
+    .project-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.6rem;
+      transition: all .2s; position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent-grad);
+    }
+    .project-card:hover { border-color: rgba(79,142,247,.4); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,.3); }
+    .project-icon { font-size: 1.8rem; margin-bottom: .8rem; }
+    .project-title { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
+    .project-desc { color: #a0aec0; font-size: .88rem; margin-bottom: 1rem; line-height: 1.6; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .project-tag {
+      padding: .2rem .65rem; border-radius: 999px; font-size: .75rem; font-weight: 500;
+      background: var(--bg3); color: var(--muted); border: 1px solid var(--border);
+    }
+
+    /* ── WORKFLOW ── */
+    .workflow {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.2rem; margin-top: 1rem;
+    }
+    .workflow-title { font-size: .75rem; color: var(--muted); margin-bottom: .7rem; font-weight: 600; letter-spacing: .5px; }
+    .workflow-steps {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .4rem;
+    }
+    .wf-step {
+      padding: .3rem .75rem; border-radius: 6px; font-size: .78rem; font-weight: 600;
+      background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    }
+    .wf-arrow { color: var(--accent); font-size: .85rem; }
+
+    /* ── EDUCATION ── */
+    .edu-grid { display: flex; flex-direction: column; gap: 1rem; }
+    .edu-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.4rem 1.6rem;
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      transition: border-color .2s;
+    }
+    .edu-card:hover { border-color: rgba(79,142,247,.4); }
+    .edu-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--accent-grad); display: flex; align-items: center;
+      justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+    }
+    .edu-school { font-weight: 700; font-size: 1rem; }
+    .edu-course { color: var(--accent); font-size: .88rem; }
+    .edu-year { color: var(--muted); font-size: .82rem; margin-top: .2rem; }
+
+    /* ── ACADEMIC PROJECTS ── */
+    .academic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
+    .academic-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      transition: all .2s; text-decoration: none; color: var(--text);
+      display: block; position: relative; overflow: hidden;
+    }
+    .academic-card.clickable { cursor: pointer; }
+    .academic-card.clickable::after {
+      content: 'Ver detalhes →';
+      position: absolute; bottom: 1rem; right: 1.2rem;
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+      opacity: 0; transition: opacity .2s;
+    }
+    .academic-card.clickable:hover::after { opacity: 1; }
+    .academic-card.clickable:hover { border-color: rgba(79,142,247,.4); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,.3); }
+    .academic-card:not(.clickable):hover { border-color: rgba(124,58,237,.4); transform: translateY(-3px); }
+    .academic-badge {
+      display: inline-block; padding: .25rem .7rem; border-radius: 999px; font-size: .75rem;
+      font-weight: 600; margin-bottom: .8rem;
+    }
+    .badge-gold   { background: rgba(251,191,36,.1);  color: #fbbf24;       border: 1px solid rgba(251,191,36,.3); }
+    .badge-blue   { background: rgba(79,142,247,.1);  color: var(--accent); border: 1px solid rgba(79,142,247,.3); }
+    .badge-purple { background: rgba(167,139,250,.1); color: #a78bfa;       border: 1px solid rgba(167,139,250,.3); }
+    .badge-green  { background: rgba(52,211,153,.1);  color: #34d399;       border: 1px solid rgba(52,211,153,.3); }
+    .academic-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .academic-card p { color: #a0aec0; font-size: .88rem; padding-bottom: 1.4rem; }
+
+    /* ── CONTACT ── */
+    #contact { text-align: center; }
+    .contact-grid {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem;
+    }
+    .contact-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem 2rem;
+      text-decoration: none; color: var(--text); transition: all .2s;
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      min-width: 160px;
+    }
+    .contact-card:hover { border-color: var(--accent); transform: translateY(-3px); color: var(--accent); }
+    .contact-card-icon { font-size: 1.6rem; }
+    .contact-card-label { font-size: .82rem; color: var(--muted); }
+    .contact-card-value { font-size: .9rem; font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 2.5rem 2rem;
+      border-top: 1px solid var(--border); color: var(--muted); font-size: .82rem;
+    }
+
+    /* ── FADE IN ANIMATION ── */
+    .fade-in {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .nav-links { gap: 1rem; }
+      section { padding: 4rem 1.2rem; }
+      .timeline-header { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">GMB</span>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#experiencia">Experiência</a></li>
+    <li><a href="#projetos">Projetos</a></li>
+    <li><a href="#habilidades">Skills</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="sobre">
+  <div class="hero-badge">Disponível para novas oportunidades</div>
+  <h1 class="hero-name">Guilherme<br /><span>Moret de Barros</span></h1>
+  <p class="hero-title">Engenheiro de Dados &amp; Automação de Processos</p>
+  <p class="hero-desc">
+    Focado em Automação de Processos, Inteligência de Dados e Melhoria Operacional.
+    Atuo com Python, SQL, Power BI, SAP e ferramentas low-code para criar dashboards,
+    automatizar workflows e apoiar a tomada de decisão baseada em dados.
+  </p>
+  <div class="hero-ctas">
+    <a href="mailto:guilherme.mb@hotmail.com" class="btn btn-primary">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+      Entrar em contato
+    </a>
+    <a href="https://linkedin.com/in/barros-guilherme" target="_blank" class="btn btn-outline">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      LinkedIn
+    </a>
+  </div>
+  <div class="hero-contacts">
+    <a href="mailto:guilherme.mb@hotmail.com" class="contact-item">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+      guilherme.mb@hotmail.com
+    </a>
+    <span class="contact-item">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.89a16 16 0 0 0 6.06 6.06l.99-.99a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      (85) 98122-4246
+    </span>
+    <span class="contact-item">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      Cotia – SP
+    </span>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experiencia">
+  <div class="section-label fade-in">
+    <h2>Experiência</h2>
+  </div>
+  <div class="timeline">
+
+    <div class="timeline-item fade-in">
+      <div class="timeline-header">
+        <div>
+          <div class="timeline-company">Armac Locação</div>
+          <div class="timeline-role">Analista de Planejamento</div>
+        </div>
+        <span class="timeline-period">Dez 2024 – Dez 2025 &nbsp;·&nbsp; Vargem Grande Paulista, SP</span>
+      </div>
+      <ul class="timeline-list">
+        <li>Mapeamento de processos operacionais e automações para fluxo de manutenção com Python, API e SQL, reduzindo o lead time de atividades.</li>
+        <li>Desenvolvimento de dashboards em Power BI para acompanhamento de KPIs de manutenção.</li>
+        <li>Integração dos bancos de dados SAP S/4HANA, Pipefy e Fastfield com SQL para otimização do processo de compra de peças.</li>
+        <li>Automação de tarefas operacionais com Python (RPA), reduzindo atividades manuais.</li>
+        <li>Gestão de ordens corretivas e preventivas no SAP PM e suporte na gestão de peças e insumos.</li>
+      </ul>
+      <span class="timeline-highlight">🚀 Processo de compra de peças acelerado em 20% com monitoramento de SLA</span>
+    </div>
+
+    <div class="timeline-item fade-in">
+      <div class="timeline-header">
+        <div>
+          <div class="timeline-company">Belgo Bekaert Arames</div>
+          <div class="timeline-role">Estagiário de Manutenção</div>
+        </div>
+        <span class="timeline-period">Mar 2022 – Mai 2023 &nbsp;·&nbsp; Osasco, SP</span>
+      </div>
+      <ul class="timeline-list">
+        <li>Análise e acompanhamento de ordens de manutenção no SAP.</li>
+        <li>Monitoramento de KPIs e criação de planilhas e relatórios para análise de performance.</li>
+        <li>Suporte na gestão de manutenção preventiva e criação de requisições de compra.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- N8N PROJECTS -->
+<section id="projetos">
+  <div class="section-label fade-in">
+    <h2>Projetos de Automação</h2>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card fade-in">
+      <div class="project-icon">🤖</div>
+      <div class="project-title">Registro de Despesas via Telegram</div>
+      <div class="project-desc">
+        Bot no Telegram que recebe mensagens formatadas com dados de despesas, processa com JavaScript e registra automaticamente em uma planilha do Google Sheets, enviando confirmação ao usuário.
+      </div>
+      <div class="workflow">
+        <div class="workflow-title">FLUXO N8N</div>
+        <div class="workflow-steps">
+          <span class="wf-step">📱 Telegram</span>
+          <span class="wf-arrow">→</span>
+          <span class="wf-step">⚙️ Parse JS</span>
+          <span class="wf-arrow">→</span>
+          <span class="wf-step">📊 Google Sheets</span>
+          <span class="wf-arrow">→</span>
+          <span class="wf-step">✅ Confirmação</span>
+        </div>
+      </div>
+      <div class="project-tags" style="margin-top:1rem">
+        <span class="project-tag">n8n</span>
+        <span class="project-tag">Telegram Bot</span>
+        <span class="project-tag">JavaScript</span>
+        <span class="project-tag">Google Sheets</span>
+        <span class="project-tag">Low-code</span>
+      </div>
+    </div>
+
+    <div class="project-card fade-in">
+      <div class="project-icon">📄</div>
+      <div class="project-title">Extração de Faturas com OCR</div>
+      <div class="project-desc">
+        Automação que recebe PDFs de faturas pelo Telegram, usa OCR (ocr.space) para extrair número, vencimento e valor total, salva no Google Sheets e arquiva o documento no Google Drive.
+      </div>
+      <div class="workflow">
+        <div class="workflow-title">FLUXO N8N</div>
+        <div class="workflow-steps">
+          <span class="wf-step">📱 Telegram</span>
+          <span class="wf-arrow">→</span>
+          <span class="wf-step">🔍 OCR API</span>
+          <span class="wf-arrow">→</span>
+          <span class="wf-step">⚙️ Parse JS</span>
+          <span class="wf-arrow">→</span>
+          <span class="wf-step">📊 Sheets</span>
+          <span class="wf-arrow">→</span>
+          <span class="wf-step">☁️ Drive</span>
+        </div>
+      </div>
+      <div class="project-tags" style="margin-top:1rem">
+        <span class="project-tag">n8n</span>
+        <span class="project-tag">OCR</span>
+        <span class="project-tag">Telegram Bot</span>
+        <span class="project-tag">Google Drive</span>
+        <span class="project-tag">Google Sheets</span>
+        <span class="project-tag">API REST</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ACADEMIC PROJECTS -->
+  <div style="margin-top: 3rem;">
+    <div class="section-label fade-in" style="margin-bottom:1.5rem">
+      <h2 style="font-size:1.3rem; color: var(--muted); font-weight:600">Projetos Acadêmicos</h2>
+    </div>
+    <div class="academic-grid">
+
+      <a href="projetos/baja/" class="academic-card clickable fade-in">
+        <span class="academic-badge badge-blue">Competição &amp; Liderança</span>
+        <h3>Baja SAE MackGear</h3>
+        <p>Liderança de equipe de 20 estudantes no desenvolvimento de veículo off-road, com análise estrutural FEA/NASTRAN, rigidez torcional e dimensionamento de suspensão.</p>
+      </a>
+
+      <a href="projetos/tcc/" class="academic-card clickable fade-in">
+        <span class="academic-badge badge-purple">TCC · Mackenzie 2024</span>
+        <h3>Impressão 3D no Baja SAE</h3>
+        <p>Proposta de substituição de peças usinadas em alumínio por impressão 3D FDM/ABS, com otimização topológica no Ansys e validação por ensaios mecânicos.</p>
+      </a>
+
+      <a href="projetos/tech/" class="academic-card clickable fade-in">
+        <span class="academic-badge badge-green">Python &amp; Data Science</span>
+        <h3>Projetos Tech</h3>
+        <p>Notebooks Python com web scraping de notícias (BeautifulSoup), análise estatística descritiva e análise de sentimentos em português com SentiLex.</p>
+      </a>
+
+      <div class="academic-card fade-in">
+        <span class="academic-badge badge-gold">🥈 Vice-campeão</span>
+        <h3>Hackathon de Machine Learning</h3>
+        <p>Desenvolvimento de modelo de machine learning aplicado à indústria, conquistando o 2º lugar na competição.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="habilidades">
+  <div class="section-label fade-in">
+    <h2>Habilidades</h2>
+  </div>
+  <div class="skills-legend fade-in">
+    <span class="legend-item"><span class="legend-dot" style="background:#4f8ef7"></span>Dados &amp; BI</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>Automação</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#34d399"></span>Ferramentas</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#fb923c"></span>Linguagens</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#f472b6"></span>Gestão</span>
+  </div>
+  <div class="skills-grid fade-in">
+    <span class="skill-tag skill-data">Power BI</span>
+    <span class="skill-tag skill-data">SQL</span>
+    <span class="skill-tag skill-data">ETL</span>
+    <span class="skill-tag skill-data">Análise de Dados</span>
+    <span class="skill-tag skill-data">Ciência de Dados</span>
+    <span class="skill-tag skill-data">Machine Learning</span>
+    <span class="skill-tag skill-lang">Python</span>
+    <span class="skill-tag skill-lang">Pandas</span>
+    <span class="skill-tag skill-lang">Scikit-Learn</span>
+    <span class="skill-tag skill-lang">Seaborn</span>
+    <span class="skill-tag skill-lang">C++</span>
+    <span class="skill-tag skill-lang">VBA</span>
+    <span class="skill-tag skill-auto">n8n</span>
+    <span class="skill-tag skill-auto">APIs</span>
+    <span class="skill-tag skill-auto">Low-code</span>
+    <span class="skill-tag skill-auto">RPA</span>
+    <span class="skill-tag skill-auto">Power Apps</span>
+    <span class="skill-tag skill-tool">SAP S/4HANA</span>
+    <span class="skill-tag skill-tool">SAP PM</span>
+    <span class="skill-tag skill-tool">Excel Avançado</span>
+    <span class="skill-tag skill-tool">Google Sheets</span>
+    <span class="skill-tag skill-tool">Google Docs</span>
+    <span class="skill-tag skill-mgmt">Scrum</span>
+    <span class="skill-tag skill-mgmt">Melhoria Contínua</span>
+    <span class="skill-tag skill-mgmt">Inglês Fluente</span>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="formacao">
+  <div class="section-label fade-in">
+    <h2>Formação</h2>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card fade-in">
+      <div class="edu-icon">🎓</div>
+      <div>
+        <div class="edu-school">Universidade Presbiteriana Mackenzie</div>
+        <div class="edu-course">Engenharia Mecatrônica</div>
+        <div class="edu-year">2019 – 2024 &nbsp;·&nbsp; São Paulo, SP</div>
+      </div>
+    </div>
+    <div class="edu-card fade-in">
+      <div class="edu-icon">🇺🇸</div>
+      <div>
+        <div class="edu-school">Pittsburg State University</div>
+        <div class="edu-course">Intercâmbio – Engenharia Mecatrônica</div>
+        <div class="edu-year">2023 &nbsp;·&nbsp; Kansas, EUA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contato">
+  <div class="fade-in">
+    <div class="section-label">
+      <h2>Contato</h2>
+    </div>
+    <p style="color:var(--muted); max-width:500px; margin: 0 auto;">
+      Aberto a oportunidades em dados, automação e engenharia. Entre em contato!
+    </p>
+    <div class="contact-grid">
+      <a href="mailto:guilherme.mb@hotmail.com" class="contact-card">
+        <span class="contact-card-icon">✉️</span>
+        <span class="contact-card-label">Email</span>
+        <span class="contact-card-value">guilherme.mb@hotmail.com</span>
+      </a>
+      <a href="https://linkedin.com/in/barros-guilherme" target="_blank" class="contact-card">
+        <span class="contact-card-icon">💼</span>
+        <span class="contact-card-label">LinkedIn</span>
+        <span class="contact-card-value">barros-guilherme</span>
+      </a>
+      <a href="tel:+5585981224246" class="contact-card">
+        <span class="contact-card-icon">📱</span>
+        <span class="contact-card-label">Telefone</span>
+        <span class="contact-card-value">(85) 98122-4246</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Guilherme Moret de Barros &nbsp;·&nbsp; Engenheiro &amp; Analista de Dados &nbsp;·&nbsp; Cotia, SP</p>
+</footer>
+
+<script>
+  // Fade-in on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Active nav link highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? '#e2e8f0' : '';
+    });
+  });
+</script>
+
+</body>
+</html>

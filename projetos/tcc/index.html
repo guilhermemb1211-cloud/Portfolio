@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TCC – Impressão 3D no Baja SAE</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #13161e;
+      --bg3: #1a1e2a;
+      --accent: #4f8ef7;
+      --accent2: #7c3aed;
+      --accent-grad: linear-gradient(135deg, #4f8ef7, #7c3aed);
+      --text: #e2e8f0;
+      --muted: #8892a4;
+      --border: #1f2535;
+      --card: #161b27;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,15,20,0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between; height: 60px;
+    }
+    .nav-logo { font-weight: 700; font-size: 1rem; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-back { display: flex; align-items: center; gap: .5rem; color: var(--muted); text-decoration: none; font-size: .875rem; transition: color .2s; }
+    .nav-back:hover { color: var(--text); }
+
+    .hero { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; max-width: 1000px; margin: 0 auto; padding: 100px 2rem 4rem; }
+    .hero-badge { display: inline-block; margin-bottom: 1.2rem; padding: .35rem .9rem; border-radius: 999px; background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.3); color: #a78bfa; font-size: .8rem; font-weight: 600; letter-spacing: .5px; width: fit-content; }
+    .hero-title { font-size: clamp(1.8rem, 4.5vw, 3rem); font-weight: 800; line-height: 1.15; margin-bottom: .7rem; }
+    .hero-title span { background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 2rem; max-width: 680px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .tag { padding: .3rem .85rem; border-radius: 999px; font-size: .8rem; font-weight: 500; border: 1px solid; }
+    .tag-blue   { color: #4f8ef7; border-color: rgba(79,142,247,.35); background: rgba(79,142,247,.08); }
+    .tag-purple { color: #a78bfa; border-color: rgba(167,139,250,.35); background: rgba(167,139,250,.08); }
+    .tag-green  { color: #34d399; border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.08); }
+    .tag-orange { color: #fb923c; border-color: rgba(251,146,60,.35); background: rgba(251,146,60,.08); }
+
+    section { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
+    .section-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: .75rem; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .content-block { color: #a0aec0; font-size: .95rem; line-height: 1.8; margin-bottom: 1.2rem; }
+    .content-block strong { color: var(--text); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem 1.2rem; text-align: center; transition: border-color .2s; }
+    .stat-card:hover { border-color: rgba(124,58,237,.4); }
+    .stat-value { font-size: 1.6rem; font-weight: 800; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-label { color: var(--muted); font-size: .8rem; margin-top: .3rem; }
+
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.1rem; margin-top: 1.5rem; }
+    .step-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; position: relative; overflow: hidden; }
+    .step-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent-grad); }
+    .step-num { font-size: .72rem; font-weight: 700; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: .4rem; }
+    .step-card h3 { font-size: .98rem; font-weight: 700; margin-bottom: .4rem; }
+    .step-card p { color: #a0aec0; font-size: .85rem; line-height: 1.6; }
+
+    .compare-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+    .compare-table th, .compare-table td { padding: .85rem 1rem; text-align: left; font-size: .88rem; border-bottom: 1px solid var(--border); }
+    .compare-table th { color: var(--muted); font-weight: 600; background: var(--bg2); font-size: .78rem; letter-spacing: .5px; text-transform: uppercase; }
+    .compare-table td { color: #a0aec0; }
+    .compare-table td:first-child { color: var(--text); font-weight: 600; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: rgba(124,58,237,.04); }
+    .highlight-cell { color: #a78bfa !important; font-weight: 600 !important; }
+
+    .result-highlight { display: flex; align-items: flex-start; gap: .8rem; background: rgba(167,139,250,.08); border: 1px solid rgba(167,139,250,.2); border-radius: 10px; padding: 1rem 1.4rem; margin-top: 1.5rem; }
+    .result-highlight-text { color: var(--text); font-size: .92rem; line-height: 1.7; }
+    .result-highlight-text span { color: #a78bfa; font-weight: 700; }
+
+    .resp-list { list-style: none; display: flex; flex-direction: column; gap: .6rem; margin-top: 1rem; }
+    .resp-list li { color: #a0aec0; font-size: .9rem; padding-left: 1.3rem; position: relative; }
+    .resp-list li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); }
+
+    .keyword-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+    .keyword { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: .3rem .8rem; font-size: .82rem; color: var(--muted); font-family: monospace; }
+
+    .file-card { display: flex; align-items: center; gap: 1.2rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem 1.5rem; text-decoration: none; color: var(--text); transition: all .2s; margin-top: 1rem; }
+    .file-card:hover { border-color: var(--accent); transform: translateX(4px); }
+    .file-icon { font-size: 2rem; flex-shrink: 0; }
+    .file-name { font-weight: 600; font-size: .95rem; }
+    .file-meta { color: var(--muted); font-size: .8rem; margin-top: .1rem; }
+    .file-arrow { margin-left: auto; color: var(--accent); font-size: 1.1rem; }
+
+    footer { text-align: center; padding: 2.5rem 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .82rem; }
+
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 640px) { nav { padding: 0 1rem; } section { padding: 2rem 1.2rem; } .hero { padding: 90px 1.2rem 3rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">GMB</span>
+  <a href="../../index.html" class="nav-back">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+    Voltar ao portfólio
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge fade-in">TCC · Engenharia Mecatrônica · Mackenzie 2024</div>
+  <h1 class="hero-title fade-in">
+    Proposta de Substituição de Peças<br />
+    <span>Usinadas por Impressão 3D</span><br />
+    em um Veículo Baja SAE
+  </h1>
+  <p class="hero-subtitle fade-in">
+    Trabalho de Conclusão de Curso avaliando a viabilidade mecânica de substituir o pedal de freio usinado
+    em alumínio 6061 por uma peça fabricada via FDM em ABS, com otimização topológica no Ansys e ensaios físicos.
+  </p>
+  <div class="tag-row fade-in">
+    <span class="tag tag-purple">FEA / Ansys Mechanical</span>
+    <span class="tag tag-purple">Impressão 3D (FDM)</span>
+    <span class="tag tag-blue">Otimização Topológica</span>
+    <span class="tag tag-blue">DFAM</span>
+    <span class="tag tag-green">ABS · PLA</span>
+    <span class="tag tag-orange">Ensaios Mecânicos</span>
+  </div>
+</div>
+
+<!-- RESUMO -->
+<section>
+  <div class="section-title fade-in">Resumo da Pesquisa</div>
+  <p class="content-block fade-in">
+    Este trabalho realizou um estudo para avaliar as <strong>características mecânicas de um pedal de freio
+    impresso em 3D em ABS pelo processo FDM</strong> a fim de concluir se o pedal de freio de um veículo Baja,
+    fabricado através de usinagem em alumínio 6061, pode ser substituído por uma peça impressa em 3D.
+  </p>
+  <p class="content-block fade-in">
+    O estudo abrange as <strong>características e requisitos do projeto Baja SAE</strong> e discute os
+    benefícios que tal substituição de processo de manufatura pode proporcionar — incluindo redução de
+    custos, menor desperdício de material e maior liberdade geométrica para otimização estrutural.
+  </p>
+
+  <div class="keyword-row fade-in">
+    <span class="keyword">otimização estrutural</span>
+    <span class="keyword">método dos elementos finitos</span>
+    <span class="keyword">impressão 3D</span>
+    <span class="keyword">DFAM</span>
+    <span class="keyword">ABS</span>
+    <span class="keyword">FDM</span>
+  </div>
+</section>
+
+<!-- METODOLOGIA -->
+<section>
+  <div class="section-title fade-in">Metodologia</div>
+  <div class="steps-grid fade-in">
+    <div class="step-card">
+      <div class="step-num">Etapa 01</div>
+      <h3>Aquisição de Dados</h3>
+      <p>Medição experimental das forças aplicadas no pedal durante frenagem no protótipo Baja SAE para definição das condições de contorno da simulação.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Etapa 02</div>
+      <h3>Otimização Topológica</h3>
+      <p>Otimização topológica passo a passo no <strong>Ansys Mechanical</strong> para geração de geometria otimizada segundo os princípios do DFAM (Design For Additive Manufacturing).</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Etapa 03</div>
+      <h3>Análise por Elementos Finitos</h3>
+      <p>Análise estática FEA da geometria otimizada para validação estrutural, verificando tensões e deslocamentos sob as cargas de operação.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">Etapa 04</div>
+      <h3>Ensaios Físicos</h3>
+      <p>Ensaios práticos de <strong>tração e compressão</strong> em corpos de prova impressos em ABS e PLA para validação das propriedades mecânicas simuladas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MATERIAIS -->
+<section>
+  <div class="section-title fade-in">Comparativo de Materiais</div>
+  <p class="content-block fade-in">
+    A escolha do material é crítica na manufatura aditiva. O estudo comparou o alumínio 6061 (material
+    original usinado) com os polímeros ABS e PLA disponíveis para o processo FDM.
+  </p>
+
+  <table class="compare-table fade-in">
+    <thead>
+      <tr>
+        <th>Propriedade</th>
+        <th>Alumínio 6061</th>
+        <th>ABS (FDM)</th>
+        <th>PLA (FDM)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Processo</td>
+        <td>Usinagem CNC</td>
+        <td class="highlight-cell">Impressão 3D FDM</td>
+        <td>Impressão 3D FDM</td>
+      </tr>
+      <tr>
+        <td>Resistência ao calor</td>
+        <td>Alta</td>
+        <td class="highlight-cell">Moderada (melhor que PLA)</td>
+        <td>Baixa</td>
+      </tr>
+      <tr>
+        <td>Complexidade geométrica</td>
+        <td>Limitada</td>
+        <td class="highlight-cell">Alta (geometrias otimizadas)</td>
+        <td class="highlight-cell">Alta</td>
+      </tr>
+      <tr>
+        <td>Desperdício de material</td>
+        <td>Alto (subtrativo)</td>
+        <td class="highlight-cell">Baixo (aditivo)</td>
+        <td class="highlight-cell">Baixo (aditivo)</td>
+      </tr>
+      <tr>
+        <td>Custo de produção</td>
+        <td>Alto</td>
+        <td class="highlight-cell">Baixo</td>
+        <td class="highlight-cell">Baixo</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="result-highlight fade-in">
+    <span style="font-size:1.4rem; flex-shrink:0">🎯</span>
+    <div class="result-highlight-text">
+      O <span>ABS via FDM</span> foi selecionado como material de estudo por sua maior resistência térmica
+      em relação ao PLA — característica essencial para peças próximas ao sistema de freio — e por
+      permitir a fabricação de geometrias otimizadas impossíveis de usinar.
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSO FDM -->
+<section>
+  <div class="section-title fade-in">Processo FDM</div>
+  <p class="content-block fade-in">
+    O <strong>Fused Deposition Modeling (FDM)</strong> utiliza filamentos de resina termoplástica aquecidos
+    a altas temperaturas para construir objetos em camadas. O bico extrusor deposita material no plano XY
+    enquanto a plataforma desce no eixo Z a cada camada concluída.
+  </p>
+
+  <div class="stats-grid fade-in">
+    <div class="stat-card">
+      <div class="stat-value">XY</div>
+      <div class="stat-label">Plano de deposição do material</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">–Z</div>
+      <div class="stat-label">Direção de descida por camada</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">ABS</div>
+      <div class="stat-label">Material selecionado para o pedal</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">DFAM</div>
+      <div class="stat-label">Metodologia de design adotada</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTRIBUIÇÃO -->
+<section>
+  <div class="section-title fade-in">Contribuição Científica</div>
+  <ul class="resp-list fade-in">
+    <li>Estudo comparativo entre manufatura subtrativa (usinagem) e aditiva (FDM) para peças do Baja SAE</li>
+    <li>Aplicação de <strong>otimização topológica no Ansys Mechanical</strong> para redesign do pedal de freio</li>
+    <li>Validação experimental com ensaios de tração e compressão em corpos de prova impressos</li>
+    <li>Análise de seleção de material (ABS vs PLA) para aplicações mecânicas em veículos competição</li>
+    <li>Demonstração do potencial de redução de custo e desperdício com manufatura aditiva no Baja SAE</li>
+    <li>Orientação: <strong>Prof. Dr. Milton Vieira Junior</strong> — Universidade Presbiteriana Mackenzie</li>
+  </ul>
+</section>
+
+<!-- DOWNLOAD -->
+<section>
+  <div class="section-title fade-in">Artigo Completo</div>
+  <a href="ARTIGO REVISADO- Guilherme Moret de Barros.pdf" target="_blank" class="file-card fade-in">
+    <span class="file-icon">📄</span>
+    <div>
+      <div class="file-name">Artigo TCC – Guilherme Moret de Barros</div>
+      <div class="file-meta">Trabalho de Conclusão de Curso · Engenharia Mecatrônica · Mackenzie 2024 · PDF</div>
+    </div>
+    <span class="file-arrow">↗</span>
+  </a>
+</section>
+
+<footer>
+  <p>Guilherme Moret de Barros &nbsp;·&nbsp; TCC Engenharia Mecatrônica &nbsp;·&nbsp; Mackenzie 2024</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

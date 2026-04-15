@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projetos Tech – Data Science & NLP</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #13161e;
+      --bg3: #1a1e2a;
+      --accent: #4f8ef7;
+      --accent2: #7c3aed;
+      --accent-grad: linear-gradient(135deg, #4f8ef7, #7c3aed);
+      --text: #e2e8f0;
+      --muted: #8892a4;
+      --border: #1f2535;
+      --card: #161b27;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,15,20,0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between; height: 60px;
+    }
+    .nav-logo { font-weight: 700; font-size: 1rem; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-back { display: flex; align-items: center; gap: .5rem; color: var(--muted); text-decoration: none; font-size: .875rem; transition: color .2s; }
+    .nav-back:hover { color: var(--text); }
+
+    .hero { min-height: 65vh; display: flex; flex-direction: column; justify-content: center; max-width: 1000px; margin: 0 auto; padding: 100px 2rem 4rem; }
+    .hero-badge { display: inline-block; margin-bottom: 1.2rem; padding: .35rem .9rem; border-radius: 999px; background: rgba(52,211,153,.1); border: 1px solid rgba(52,211,153,.3); color: #34d399; font-size: .8rem; font-weight: 600; letter-spacing: .5px; width: fit-content; }
+    .hero-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.15; margin-bottom: .7rem; }
+    .hero-title span { background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 2rem; max-width: 680px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .tag { padding: .3rem .85rem; border-radius: 999px; font-size: .8rem; font-weight: 500; border: 1px solid; }
+    .tag-blue   { color: #4f8ef7; border-color: rgba(79,142,247,.35); background: rgba(79,142,247,.08); }
+    .tag-purple { color: #a78bfa; border-color: rgba(167,139,250,.35); background: rgba(167,139,250,.08); }
+    .tag-green  { color: #34d399; border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.08); }
+    .tag-orange { color: #fb923c; border-color: rgba(251,146,60,.35); background: rgba(251,146,60,.08); }
+
+    section { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
+    .section-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: .75rem; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .content-block { color: #a0aec0; font-size: .95rem; line-height: 1.8; margin-bottom: 1.2rem; }
+    .content-block strong { color: var(--text); }
+
+    /* Notebook cards */
+    .notebook-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 2rem; margin-bottom: 1.5rem; position: relative; overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .notebook-card:hover { border-color: rgba(79,142,247,.4); transform: translateY(-2px); }
+    .notebook-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent-grad); }
+    .notebook-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .notebook-title-wrap { display: flex; align-items: center; gap: .75rem; }
+    .notebook-icon { font-size: 1.8rem; }
+    .notebook-title { font-size: 1.1rem; font-weight: 700; }
+    .notebook-subtitle { color: var(--muted); font-size: .82rem; margin-top: .1rem; font-family: monospace; }
+    .notebook-desc { color: #a0aec0; font-size: .9rem; line-height: 1.7; margin-bottom: 1.2rem; }
+
+    /* Code snippet */
+    .code-block {
+      background: #0a0c11; border: 1px solid var(--border); border-radius: 8px;
+      padding: 1rem 1.2rem; font-family: 'Consolas', 'Monaco', monospace; font-size: .8rem;
+      color: #a0aec0; overflow-x: auto; margin: 1rem 0; position: relative;
+    }
+    .code-block .code-label { font-size: .7rem; color: var(--muted); margin-bottom: .6rem; font-family: sans-serif; letter-spacing: .5px; text-transform: uppercase; }
+    .code-kw  { color: #a78bfa; }
+    .code-fn  { color: #4f8ef7; }
+    .code-str { color: #34d399; }
+    .code-cmt { color: #4a5568; font-style: italic; }
+    .code-var { color: #fb923c; }
+
+    /* Output block */
+    .output-block {
+      background: #080a0e; border: 1px solid var(--border); border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0; padding: .8rem 1.1rem; font-size: .78rem; color: #718096;
+      font-family: monospace; margin-top: .5rem; max-height: 140px; overflow: hidden;
+      position: relative;
+    }
+    .output-block::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+      background: linear-gradient(transparent, #080a0e);
+    }
+    .output-label { font-size: .7rem; color: var(--muted); margin-bottom: .4rem; font-family: sans-serif; text-transform: uppercase; letter-spacing: .5px; }
+
+    /* Notebook tags */
+    .nb-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.2rem; }
+    .nb-tag { padding: .2rem .65rem; border-radius: 999px; font-size: .75rem; font-weight: 500; background: var(--bg3); color: var(--muted); border: 1px solid var(--border); }
+
+    /* File download */
+    .files-grid { display: flex; flex-direction: column; gap: .8rem; margin-top: 1rem; }
+    .file-card { display: flex; align-items: center; gap: 1.2rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.4rem; text-decoration: none; color: var(--text); transition: all .2s; }
+    .file-card:hover { border-color: var(--accent); transform: translateX(4px); }
+    .file-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .file-name { font-weight: 600; font-size: .92rem; }
+    .file-meta { color: var(--muted); font-size: .78rem; margin-top: .1rem; font-family: monospace; }
+    .file-arrow { margin-left: auto; color: var(--accent); font-size: 1rem; }
+
+    footer { text-align: center; padding: 2.5rem 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .82rem; }
+
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 640px) { nav { padding: 0 1rem; } section { padding: 2rem 1.2rem; } .hero { padding: 90px 1.2rem 3rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">GMB</span>
+  <a href="../../index.html" class="nav-back">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+    Voltar ao portfólio
+  </a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge fade-in">Python · Data Science · NLP</div>
+  <h1 class="hero-title fade-in">Projetos de<br /><span>Dados &amp; Análise</span></h1>
+  <p class="hero-subtitle fade-in">
+    Coleção de notebooks Python explorando web scraping, análise estatística descritiva e
+    processamento de linguagem natural (NLP) com análise de sentimentos usando SentiLex.
+  </p>
+  <div class="tag-row fade-in">
+    <span class="tag tag-blue">Python</span>
+    <span class="tag tag-blue">Pandas</span>
+    <span class="tag tag-green">BeautifulSoup</span>
+    <span class="tag tag-green">Scikit-Learn</span>
+    <span class="tag tag-purple">NLP</span>
+    <span class="tag tag-purple">SentiLex</span>
+    <span class="tag tag-orange">Jupyter Notebook</span>
+  </div>
+</div>
+
+<!-- NOTEBOOKS -->
+<section>
+  <div class="section-title fade-in">Notebooks</div>
+
+  <!-- Web Scraping -->
+  <div class="notebook-card fade-in">
+    <div class="notebook-header">
+      <div class="notebook-title-wrap">
+        <span class="notebook-icon">🕸️</span>
+        <div>
+          <div class="notebook-title">Web Scraping de Notícias</div>
+          <div class="notebook-subtitle">scraping_noticias.ipynb</div>
+        </div>
+      </div>
+      <div class="tag-row">
+        <span class="tag tag-green">BeautifulSoup</span>
+        <span class="tag tag-blue">requests</span>
+      </div>
+    </div>
+    <p class="notebook-desc">
+      Automação de coleta de dados jornalísticos do portal <strong>Estadão</strong> usando técnicas de
+      web scraping. O script realiza requisições HTTP, faz o parsing do HTML com BeautifulSoup e extrai
+      os títulos de notícias em tempo real — demonstrando como obter dados não estruturados da web
+      para alimentar pipelines de análise.
+    </p>
+    <div class="code-block">
+      <div class="code-label">Python</div>
+<span class="code-kw">import</span> requests
+<span class="code-kw">from</span> bs4 <span class="code-kw">import</span> BeautifulSoup
+
+<span class="code-cmt"># Requisição ao portal de notícias</span>
+url = <span class="code-str">'https://www.estadao.com.br/'</span>
+response = requests.<span class="code-fn">get</span>(url)
+soup = BeautifulSoup(response.text, <span class="code-str">'html.parser'</span>)
+
+<span class="code-cmt"># Extração de manchetes</span>
+<span class="code-kw">for</span> headline <span class="code-kw">in</span> soup.<span class="code-fn">find_all</span>(<span class="code-str">'h2'</span>, class_=<span class="code-str">'headline'</span>):
+    <span class="code-fn">print</span>(headline.<span class="code-fn">get_text</span>().<span class="code-fn">strip</span>())</div>
+    <div class="output-block" style="margin-top:.5rem">
+      <div class="output-label">Saída (amostra)</div>
+      Operação contra elo entre PCC e prefeituras tem 13 presos; fraudes chegam a R$ 200 mi<br/>
+      Dólar chega a R$ 5,28, maior patamar em mais de um ano<br/>
+      Forças americanas simulam no Ártico guerra entre grandes potências<br/>
+      Minha Casa Minha Vida 'superaquece' e deve exigir mais R$ 25 bilhões do FGTS<br/>
+      Busca por alergistas subiu 42% em três anos...
+    </div>
+    <div class="nb-tags">
+      <span class="nb-tag">web scraping</span>
+      <span class="nb-tag">BeautifulSoup</span>
+      <span class="nb-tag">requests</span>
+      <span class="nb-tag">HTML parsing</span>
+      <span class="nb-tag">extração de dados</span>
+    </div>
+  </div>
+
+  <!-- Estatística Descritiva -->
+  <div class="notebook-card fade-in">
+    <div class="notebook-header">
+      <div class="notebook-title-wrap">
+        <span class="notebook-icon">📊</span>
+        <div>
+          <div class="notebook-title">Estatística Descritiva</div>
+          <div class="notebook-subtitle">estatistica_descritiva_001.ipynb</div>
+        </div>
+      </div>
+      <div class="tag-row">
+        <span class="tag tag-blue">Pandas</span>
+        <span class="tag tag-orange">Seaborn</span>
+      </div>
+    </div>
+    <p class="notebook-desc">
+      Análise estatística descritiva de datasets com Python, cobrindo as principais técnicas de
+      sumarização e visualização de dados: medidas de tendência central (média, mediana, moda),
+      dispersão (desvio padrão, variância, IQR), distribuições e correlações. Base essencial para
+      qualquer pipeline de ciência de dados.
+    </p>
+    <div class="code-block">
+      <div class="code-label">Python</div>
+<span class="code-kw">import</span> pandas <span class="code-kw">as</span> <span class="code-var">pd</span>
+<span class="code-kw">import</span> seaborn <span class="code-kw">as</span> <span class="code-var">sns</span>
+<span class="code-kw">import</span> matplotlib.pyplot <span class="code-kw">as</span> <span class="code-var">plt</span>
+
+<span class="code-cmt"># Sumarização estatística</span>
+df.<span class="code-fn">describe</span>()          <span class="code-cmt"># média, std, quartis</span>
+df.<span class="code-fn">corr</span>()             <span class="code-cmt"># matriz de correlação</span>
+
+<span class="code-cmt"># Visualização de distribuição</span>
+sns.<span class="code-fn">histplot</span>(df[<span class="code-str">'coluna'</span>], kde=<span class="code-kw">True</span>)
+sns.<span class="code-fn">boxplot</span>(data=df)</div>
+    <div class="nb-tags">
+      <span class="nb-tag">pandas</span>
+      <span class="nb-tag">seaborn</span>
+      <span class="nb-tag">matplotlib</span>
+      <span class="nb-tag">estatística</span>
+      <span class="nb-tag">visualização de dados</span>
+    </div>
+  </div>
+
+  <!-- Análise de Sentimentos -->
+  <div class="notebook-card fade-in">
+    <div class="notebook-header">
+      <div class="notebook-title-wrap">
+        <span class="notebook-icon">🧠</span>
+        <div>
+          <div class="notebook-title">Análise de Sentimentos com SentiLex</div>
+          <div class="notebook-subtitle">sentilex_roteiro_va_01.ipynb</div>
+        </div>
+      </div>
+      <div class="tag-row">
+        <span class="tag tag-purple">NLP</span>
+        <span class="tag tag-purple">SentiLex</span>
+      </div>
+    </div>
+    <p class="notebook-desc">
+      Processamento de Linguagem Natural (NLP) em português com o léxico de sentimentos
+      <strong>SentiLex-PT</strong>. O notebook implementa um pipeline de análise de sentimentos
+      para classificar textos em positivo, negativo ou neutro — técnica aplicável em monitoramento
+      de redes sociais, análise de reviews de produtos e feedback de clientes.
+    </p>
+    <div class="code-block">
+      <div class="code-label">Python – Pipeline NLP</div>
+<span class="code-cmt"># Carregamento do léxico SentiLex-PT</span>
+sentilex = {}
+<span class="code-kw">with</span> <span class="code-fn">open</span>(<span class="code-str">'SentiLex-lem-PT02.txt'</span>) <span class="code-kw">as</span> f:
+    <span class="code-kw">for</span> line <span class="code-kw">in</span> f:
+        word, polarity = <span class="code-fn">parse_entry</span>(line)
+        sentilex[word] = polarity  <span class="code-cmt"># +1 positivo / -1 negativo</span>
+
+<span class="code-cmt"># Classificação de sentimento por texto</span>
+<span class="code-kw">def</span> <span class="code-fn">classify_sentiment</span>(text):
+    tokens = text.<span class="code-fn">lower</span>().<span class="code-fn">split</span>()
+    score = <span class="code-fn">sum</span>(sentilex.<span class="code-fn">get</span>(t, 0) <span class="code-kw">for</span> t <span class="code-kw">in</span> tokens)
+    <span class="code-kw">return</span> <span class="code-str">'positivo'</span> <span class="code-kw">if</span> score > 0 <span class="code-kw">else</span> <span class="code-str">'negativo'</span> <span class="code-kw">if</span> score &lt; 0 <span class="code-kw">else</span> <span class="code-str">'neutro'</span></div>
+    <div class="nb-tags">
+      <span class="nb-tag">NLP</span>
+      <span class="nb-tag">SentiLex-PT</span>
+      <span class="nb-tag">análise de sentimentos</span>
+      <span class="nb-tag">português</span>
+      <span class="nb-tag">léxico</span>
+      <span class="nb-tag">classificação de texto</span>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD DOS NOTEBOOKS -->
+<section>
+  <div class="section-title fade-in">Arquivos</div>
+  <div class="files-grid fade-in">
+    <a href="scraping_noticias.ipynb" download class="file-card">
+      <span class="file-icon">📓</span>
+      <div>
+        <div class="file-name">Web Scraping de Notícias</div>
+        <div class="file-meta">scraping_noticias.ipynb · Jupyter Notebook</div>
+      </div>
+      <span class="file-arrow">↓</span>
+    </a>
+    <a href="estatistica_descritiva_001.ipynb" download class="file-card">
+      <span class="file-icon">📓</span>
+      <div>
+        <div class="file-name">Estatística Descritiva</div>
+        <div class="file-meta">estatistica_descritiva_001.ipynb · Jupyter Notebook</div>
+      </div>
+      <span class="file-arrow">↓</span>
+    </a>
+    <a href="sentilex_roteiro_va_01.ipynb" download class="file-card">
+      <span class="file-icon">📓</span>
+      <div>
+        <div class="file-name">Análise de Sentimentos com SentiLex</div>
+        <div class="file-meta">sentilex_roteiro_va_01.ipynb · Jupyter Notebook</div>
+      </div>
+      <span class="file-arrow">↓</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>Guilherme Moret de Barros &nbsp;·&nbsp; Projetos Tech &nbsp;·&nbsp; Python &amp; Data Science</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

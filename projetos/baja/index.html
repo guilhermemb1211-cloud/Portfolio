@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baja SAE MackGear – Cálculo Estrutural</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg2: #13161e;
+      --bg3: #1a1e2a;
+      --accent: #4f8ef7;
+      --accent2: #7c3aed;
+      --accent-grad: linear-gradient(135deg, #4f8ef7, #7c3aed);
+      --text: #e2e8f0;
+      --muted: #8892a4;
+      --border: #1f2535;
+      --card: #161b27;
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(13,15,20,0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between; height: 60px;
+    }
+    .nav-logo { font-weight: 700; font-size: 1rem; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .nav-back { display: flex; align-items: center; gap: .5rem; color: var(--muted); text-decoration: none; font-size: .875rem; transition: color .2s; }
+    .nav-back:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero-wrap {
+      position: relative; min-height: 92vh; display: flex; flex-direction: column;
+      justify-content: flex-end; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-image: url('mgz%2047_.jpg');
+      background-size: cover; background-position: center 30%;
+      filter: brightness(.35);
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, var(--bg) 0%, rgba(13,15,20,0.4) 60%, transparent 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 1000px; width: 100%; margin: 0 auto;
+      padding: 100px 2rem 5rem;
+    }
+    .hero-badge {
+      display: inline-block; margin-bottom: 1.2rem; padding: .35rem .9rem; border-radius: 999px;
+      background: rgba(79,142,247,.15); border: 1px solid rgba(79,142,247,.4);
+      color: var(--accent); font-size: .8rem; font-weight: 600; letter-spacing: .5px;
+    }
+    .hero-title { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 800; line-height: 1.1; margin-bottom: .7rem; }
+    .hero-title span { background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-subtitle { color: #a0aec0; font-size: 1.05rem; margin-bottom: 2rem; max-width: 620px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .tag { padding: .3rem .85rem; border-radius: 999px; font-size: .8rem; font-weight: 500; border: 1px solid; }
+    .tag-blue   { color: #4f8ef7; border-color: rgba(79,142,247,.35); background: rgba(79,142,247,.1); }
+    .tag-purple { color: #a78bfa; border-color: rgba(167,139,250,.35); background: rgba(167,139,250,.1); }
+    .tag-green  { color: #34d399; border-color: rgba(52,211,153,.35); background: rgba(52,211,153,.1); }
+    .tag-orange { color: #fb923c; border-color: rgba(251,146,60,.35); background: rgba(251,146,60,.1); }
+
+    /* ── LAYOUT ── */
+    section { max-width: 1000px; margin: 0 auto; padding: 3.5rem 2rem; }
+    .section-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: .75rem; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .content-block { color: #a0aec0; font-size: .95rem; line-height: 1.8; margin-bottom: 1.2rem; }
+    .content-block strong { color: var(--text); }
+
+    /* ── STATS ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem 1rem; text-align: center; transition: border-color .2s; }
+    .stat-card:hover { border-color: rgba(79,142,247,.4); }
+    .stat-value { font-size: 1.8rem; font-weight: 800; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-label { color: var(--muted); font-size: .78rem; margin-top: .25rem; }
+
+    /* ── IMAGE GALLERY ── */
+    .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    .img-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
+    .img-grid-1-2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+    .img-grid-2-1 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 1rem; margin: 1.5rem 0; }
+
+    .img-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; cursor: zoom-in; transition: border-color .2s, transform .2s;
+    }
+    .img-card:hover { border-color: rgba(79,142,247,.5); transform: translateY(-2px); }
+    .img-card img { width: 100%; display: block; object-fit: cover; }
+    .img-card.contain img { object-fit: contain; background: #fff; }
+    .img-card.contain-dark img { object-fit: contain; background: #0d0f14; padding: .5rem; }
+    .img-card.tall img { height: 320px; }
+    .img-card.medium img { height: 240px; }
+    .img-card.short img { height: 180px; }
+    .img-caption {
+      padding: .6rem 1rem; font-size: .78rem; color: var(--muted);
+      border-top: 1px solid var(--border); background: var(--bg2);
+    }
+
+    /* ── ANALYSIS CARDS ── */
+    .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+    .analysis-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; position: relative; overflow: hidden; }
+    .analysis-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent-grad); }
+    .analysis-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .analysis-card p { color: #a0aec0; font-size: .88rem; line-height: 1.6; }
+    .analysis-icon { font-size: 1.6rem; margin-bottom: .8rem; }
+
+    /* ── COMPARISON TABLE ── */
+    .compare-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+    .compare-table th, .compare-table td { padding: .85rem 1rem; text-align: left; font-size: .88rem; border-bottom: 1px solid var(--border); }
+    .compare-table th { color: var(--muted); font-weight: 600; background: var(--bg2); font-size: .78rem; letter-spacing: .5px; text-transform: uppercase; }
+    .compare-table td { color: #a0aec0; }
+    .compare-table td:first-child { color: var(--text); font-weight: 600; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: rgba(79,142,247,.04); }
+    .highlight-cell { color: var(--accent) !important; font-weight: 600 !important; }
+
+    /* ── RESULT HIGHLIGHT ── */
+    .result-highlight { display: flex; align-items: flex-start; gap: .8rem; background: rgba(79,142,247,.08); border: 1px solid rgba(79,142,247,.2); border-radius: 10px; padding: 1rem 1.4rem; margin-top: 1.5rem; }
+    .result-highlight-text { color: var(--text); font-size: .92rem; line-height: 1.7; }
+    .result-highlight-text span { color: var(--accent); font-weight: 700; }
+
+    /* ── RESP LIST ── */
+    .resp-list { list-style: none; display: flex; flex-direction: column; gap: .6rem; margin-top: 1rem; }
+    .resp-list li { color: #a0aec0; font-size: .9rem; padding-left: 1.3rem; position: relative; }
+    .resp-list li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); }
+
+    /* ── FILE CARD ── */
+    .file-card { display: flex; align-items: center; gap: 1.2rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem 1.5rem; text-decoration: none; color: var(--text); transition: all .2s; margin-top: 1rem; }
+    .file-card:hover { border-color: var(--accent); transform: translateX(4px); }
+    .file-icon { font-size: 2rem; flex-shrink: 0; }
+    .file-name { font-weight: 600; font-size: .95rem; }
+    .file-meta { color: var(--muted); font-size: .8rem; margin-top: .1rem; }
+    .file-arrow { margin-left: auto; color: var(--accent); font-size: 1.1rem; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,.92); align-items: center; justify-content: center;
+      padding: 2rem; cursor: zoom-out;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 92vw; max-height: 88vh; object-fit: contain; border-radius: 8px; box-shadow: 0 20px 80px rgba(0,0,0,.8); }
+    .lightbox-caption { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.7); color: #a0aec0; font-size: .82rem; padding: .4rem 1rem; border-radius: 999px; pointer-events: none; }
+    .lightbox-close { position: fixed; top: 1.2rem; right: 1.5rem; color: var(--muted); font-size: 1.5rem; cursor: pointer; background: none; border: none; transition: color .2s; }
+    .lightbox-close:hover { color: var(--text); }
+
+    /* ── FOOTER ── */
+    footer { text-align: center; padding: 2.5rem 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .82rem; }
+
+    /* ── ANIMATIONS ── */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .hero-content { padding: 80px 1.2rem 4rem; }
+      section { padding: 2.5rem 1.2rem; }
+      .img-grid-2, .img-grid-1-2, .img-grid-2-1 { grid-template-columns: 1fr; }
+      .img-grid-3 { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">GMB</span>
+  <a href="../../index.html" class="nav-back">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+    Voltar ao portfólio
+  </a>
+</nav>
+
+<!-- HERO COM FOTO DO VEÍCULO -->
+<div class="hero-wrap">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge fade-in">Baja SAE · Competição Regional 2020</div>
+    <h1 class="hero-title fade-in">Baja SAE<br /><span>MackGear</span></h1>
+    <p class="hero-subtitle fade-in">
+      Liderança técnica na equipe de competição off-road da Universidade Presbiteriana Mackenzie.
+      Responsável pelo cálculo estrutural do chassi e suspensão com análise por elementos finitos (FEA/NASTRAN).
+    </p>
+    <div class="tag-row fade-in">
+      <span class="tag tag-blue">FEA · Simcenter NASTRAN</span>
+      <span class="tag tag-purple">Análise Estrutural</span>
+      <span class="tag tag-green">SAE 4130</span>
+      <span class="tag tag-orange">Liderança · Scrum</span>
+    </div>
+  </div>
+</div>
+
+<!-- VISÃO GERAL -->
+<section>
+  <div class="section-title fade-in">Visão Geral</div>
+  <div class="stats-grid fade-in">
+    <div class="stat-card">
+      <div class="stat-value">20</div>
+      <div class="stat-label">Estudantes na equipe</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">1228</div>
+      <div class="stat-label">Kt Chassi (Nm/°)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">1,4</div>
+      <div class="stat-label">Fator de segurança</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">–34%</div>
+      <div class="stat-label">Redução de massa (Brutus → Zangão)</div>
+    </div>
+  </div>
+
+  <p class="content-block fade-in">
+    O projeto Baja SAE MackGear é uma competição de engenharia estudantil promovida pela SAE Brasil,
+    onde equipes universitárias projetam, constroem e competem com um veículo off-road monoposto.
+    Como <strong>líder da equipe</strong>, coordenei 20 estudantes divididos em subequipes de chassi,
+    suspensão, transmissão e ergonomia, utilizando <strong>metodologia Scrum</strong> para gestão do projeto.
+  </p>
+
+  <!-- FOTOS REAIS DOS VEÍCULOS -->
+  <div class="img-grid-2 fade-in">
+    <div class="img-card tall" data-caption="MackGear #47 — veículo de competição na pista">
+      <img src="mgz%2047_.jpg" alt="MackGear veículo de competição número 47" />
+      <div class="img-caption">MackGear #47 — veículo de competição</div>
+    </div>
+    <div class="img-card tall" data-caption="Brutus — versão anterior do veículo MackGear">
+      <img src="WhatsApp%20Image%202021-03-23%20at%2018.47.53.jpeg" alt="Brutus — versão anterior do veículo" />
+      <div class="img-caption">Brutus — versão anterior do veículo</div>
+    </div>
+  </div>
+</section>
+
+<!-- ANÁLISE DO CHASSI -->
+<section>
+  <div class="section-title fade-in">Análise do Chassi</div>
+  <p class="content-block fade-in">
+    Foram avaliadas duas configurações de chassi para a competição Regional 2020.
+    A análise comparou material, geometria dos perfis e massa total como critérios de seleção,
+    tendo como referência o regulamento técnico SAE.
+  </p>
+
+  <!-- RENDERS DO CHASSI -->
+  <div class="img-grid-1-2 fade-in">
+    <div class="img-card medium contain-dark" data-caption="Render estrutural do chassi MGZ — vista isométrica">
+      <img src="render%20chassi%20mgz%203.jpg" alt="Render do chassi MGZ" />
+      <div class="img-caption">Render estrutural — chassi MGZ</div>
+    </div>
+    <div class="img-card medium contain-dark" data-caption="Membros estruturais do Zangão — azul: primários, laranja: secundários">
+      <img src="render%20membros%20estruturais%20zangao.jpg" alt="Membros estruturais do Zangão coloridos" />
+      <div class="img-caption">Membros estruturais do Zangão — azul: primários · laranja: secundários</div>
+    </div>
+  </div>
+
+  <!-- TABELAS DE COMPARAÇÃO -->
+  <div class="img-grid-2 fade-in">
+    <div class="img-card short contain" data-caption="Visão geral do chassi: Brutus vs Zangão — parâmetros estruturais">
+      <img src="tabela%20chassi.JPG" alt="Tabela comparativa Brutus vs Zangão" />
+      <div class="img-caption">Tabela de parâmetros — Brutus vs Zangão</div>
+    </div>
+    <div class="img-card short contain" data-caption="Comparação de massa: Brutus 36 kg (100%) vs Zangão 23 kg (66%)">
+      <img src="Capturar.JPG" alt="Comparação de massa entre os chassis" />
+      <div class="img-caption">Comparação de massa dos chassis</div>
+    </div>
+  </div>
+
+  <table class="compare-table fade-in">
+    <thead>
+      <tr><th>Parâmetro</th><th>Brutus</th><th>Zangão (selecionado)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Material</td><td>SAE 1020</td><td class="highlight-cell">SAE 4130</td></tr>
+      <tr><td>Massa total</td><td>36 kg</td><td class="highlight-cell">23 kg (–34%)</td></tr>
+      <tr><td>Perfil primário</td><td>Ø 31,75 mm · esp. 1,6 mm</td><td>Ø 31,75 mm · esp. 1,6 mm</td></tr>
+      <tr><td>Perfil secundário</td><td>Ø 25,4 mm · esp. 0,9 mm</td><td class="highlight-cell">Ø 25,4 mm · esp. 1,0 mm</td></tr>
+    </tbody>
+  </table>
+
+  <div class="result-highlight fade-in">
+    <span style="font-size:1.4rem;flex-shrink:0">🏆</span>
+    <div class="result-highlight-text">
+      O chassi <span>Zangão em SAE 4130</span> foi selecionado pela redução de <span>34% na massa</span>
+      (36 kg → 23 kg) mantendo a mesma rigidez torcional do Brutus.
+    </div>
+  </div>
+</section>
+
+<!-- RIGIDEZ TORCIONAL (FEA) -->
+<section>
+  <div class="section-title fade-in">Rigidez Torcional — FEA (NASTRAN)</div>
+  <p class="content-block fade-in">
+    A rigidez torcional foi calculada aplicando forças de <strong>600 N, 1.200 N e 1.800 N</strong>
+    no chassi com restrições em 6 graus de liberdade (pontos de fixação dianteiros).
+    A simulação foi executada no <strong>Simcenter NASTRAN</strong> com análise de deformação total nodal.
+  </p>
+
+  <!-- FEA + TABELA -->
+  <div class="img-grid-2-1 fade-in">
+    <div class="img-card medium" data-caption="FEA de rigidez torcional a 1800 N — deformação total nodal (Simcenter NASTRAN)">
+      <img src="rigidez%20torcional%201800N%20cortado.jpg" alt="FEA de rigidez torcional a 1800N" />
+      <div class="img-caption">FEA rigidez torcional — força de 1.800 N</div>
+    </div>
+    <div class="img-card medium contain" data-caption="Resultados de Kt: força, torque, ângulo de torção e rigidez para 3 casos de carga">
+      <img src="tabela%20rigidez%20torcional.JPG" alt="Tabela de resultados de rigidez torcional" />
+      <div class="img-caption">Resultados — Kt chassi e suspensão</div>
+    </div>
+  </div>
+
+  <div class="analysis-grid fade-in">
+    <div class="analysis-card">
+      <div class="analysis-icon">🔩</div>
+      <h3>Rigidez do Chassi</h3>
+      <p>Kt = <strong style="color:var(--accent)">1.228 Nm/°</strong> — consistente para os três casos de carga (600, 1.200 e 1.800 N), confirmando linearidade estrutural.</p>
+    </div>
+    <div class="analysis-card">
+      <div class="analysis-icon">🚗</div>
+      <h3>Rigidez da Suspensão</h3>
+      <p>Kt = <strong style="color:var(--accent)">880 Nm/°</strong> — 28% menor que o chassi, respeitando a hierarquia estrutural ideal para veículos off-road.</p>
+    </div>
+    <div class="analysis-card">
+      <div class="analysis-icon">📐</div>
+      <h3>Deformação Máxima</h3>
+      <p>Deformação total de <strong style="color:var(--accent)">12,367 mm</strong> para 1.800 N — dentro dos limites aceitáveis para a categoria Baja SAE.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SUSPENSÃO / MANGA DIANTEIRA -->
+<section>
+  <div class="section-title fade-in">Dimensionamento dos Braços de Suspensão</div>
+  <p class="content-block fade-in">
+    Os braços de suspensão e a manga dianteira foram dimensionados com análise de tensão combinada
+    (normal + cisalhamento), garantindo fator de segurança adequado para as condições extremas
+    de competição off-road.
+  </p>
+
+  <div class="img-grid-2 fade-in">
+    <div class="img-card medium contain-dark" data-caption="FEA da manga dianteira — tensão de Von Mises (Simcenter NASTRAN), material SAE 4130">
+      <img src="manga%20dianteira.png" alt="FEA da manga dianteira" />
+      <div class="img-caption">FEA da manga dianteira — tensão de Von Mises</div>
+    </div>
+    <div class="img-card medium contain-dark" style="display:flex;align-items:center;justify-content:center;background:var(--bg3);gap:0">
+      <div style="padding:1.5rem;width:100%">
+        <div style="font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem">Especificações — Braço de Suspensão</div>
+        <table style="width:100%;font-size:.88rem;border-collapse:collapse">
+          <tr><td style="color:var(--muted);padding:.4rem 0;border-bottom:1px solid var(--border)">Material</td><td style="color:var(--text);font-weight:600;text-align:right;border-bottom:1px solid var(--border)">Aço SAE 4130</td></tr>
+          <tr><td style="color:var(--muted);padding:.4rem 0;border-bottom:1px solid var(--border)">Diâmetro</td><td style="color:var(--text);font-weight:600;text-align:right;border-bottom:1px solid var(--border)">¾ polegada</td></tr>
+          <tr><td style="color:var(--muted);padding:.4rem 0;border-bottom:1px solid var(--border)">Espessura</td><td style="color:var(--text);font-weight:600;text-align:right;border-bottom:1px solid var(--border)">1,5 mm</td></tr>
+          <tr><td style="color:var(--muted);padding:.4rem 0;border-bottom:1px solid var(--border)">Massa por braço</td><td style="color:var(--text);font-weight:600;text-align:right;border-bottom:1px solid var(--border)">0,622 kg</td></tr>
+          <tr><td style="color:var(--muted);padding:.4rem 0">Fator de segurança</td><td style="color:var(--accent);font-weight:700;text-align:right">1,4 ✓</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RENDERS DO VEÍCULO COMPLETO -->
+<section>
+  <div class="section-title fade-in">Renders do Veículo — Zangão</div>
+  <p class="content-block fade-in">
+    Modelagem 3D completa do protótipo Zangão, incluindo chassi em SAE 4130, suspensão duplo
+    triângulo (double wishbone), motor Briggs &amp; Stratton e transmissão CVT.
+  </p>
+
+  <div class="img-grid-2 fade-in">
+    <div class="img-card medium contain-dark" data-caption="Render isométrico do Zangão — vista frontal esquerda">
+      <img src="render%20zangao.jpg" alt="Render completo do Zangão" />
+      <div class="img-caption">Zangão — render isométrico (vista frontal)</div>
+    </div>
+    <div class="img-card medium contain-dark" data-caption="Render do Zangão — vista traseira com motor e transmissão CVT">
+      <img src="render%20zangao%202.jpg" alt="Render completo do Zangão vista traseira" />
+      <div class="img-caption">Zangão — render (vista traseira / motor)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ATUAÇÃO -->
+<section>
+  <div class="section-title fade-in">Minha Atuação</div>
+  <ul class="resp-list fade-in">
+    <li>Liderança de equipe multidisciplinar com 20 estudantes divididos em subequipes técnicas</li>
+    <li>Gestão de projeto com metodologia <strong>Scrum</strong> — sprints, backlogs e revisões semanais</li>
+    <li>Cálculo estrutural do chassi com seleção de material e configuração geométrica</li>
+    <li>Análise de rigidez torcional via FEA no <strong>Simcenter NASTRAN</strong></li>
+    <li>Dimensionamento e análise dos braços de suspensão e manga dianteira</li>
+    <li>Elaboração do memorial de cálculo estrutural para a competição Regional SAE 2020</li>
+  </ul>
+</section>
+
+<!-- DOCUMENTAÇÃO -->
+<section>
+  <div class="section-title fade-in">Documentação</div>
+  <a href="Calculo%20Estrutural%20Regional%202020.pdf" target="_blank" class="file-card fade-in">
+    <span class="file-icon">📄</span>
+    <div>
+      <div class="file-name">Cálculo Estrutural Regional 2020</div>
+      <div class="file-meta">Memorial de cálculo completo · Baja SAE MackGear · PDF</div>
+    </div>
+    <span class="file-arrow">↗</span>
+  </a>
+</section>
+
+<footer>
+  <p>Guilherme Moret de Barros &nbsp;·&nbsp; Baja SAE MackGear &nbsp;·&nbsp; Mackenzie 2020</p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">✕</button>
+  <img src="" alt="" id="lightbox-img" />
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<script>
+  // Fade-in on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Lightbox
+  const lightbox    = document.getElementById('lightbox');
+  const lbImg       = document.getElementById('lightbox-img');
+  const lbCaption   = document.getElementById('lightbox-caption');
+  const lbClose     = document.getElementById('lightbox-close');
+
+  document.querySelectorAll('.img-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const img = card.querySelector('img');
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lbCaption.textContent = card.dataset.caption || img.alt;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  lbClose.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+</body>
+</html>
