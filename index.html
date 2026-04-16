@@ -34,6 +34,7 @@
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       background: rgba(13,15,20,0.85);
+      -webkit-backdrop-filter: blur(12px);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       padding: 0 2rem;
@@ -56,7 +57,7 @@
     section { padding: 6rem 2rem; max-width: 1000px; margin: 0 auto; }
 
     /* ── HERO ── */
-    #hero {
+    #sobre {
       min-height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
       padding-top: 80px;
@@ -320,7 +321,7 @@
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
       Entrar em contato
     </a>
-    <a href="https://linkedin.com/in/barros-guilherme" target="_blank" class="btn btn-outline">
+    <a href="https://linkedin.com/in/barros-guilherme" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
       <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       LinkedIn
     </a>
@@ -457,19 +458,19 @@
     </div>
     <div class="academic-grid">
 
-      <a href="projetos/baja/" class="academic-card clickable fade-in">
+      <a href="projetos/baja/index.html" class="academic-card clickable fade-in">
         <span class="academic-badge badge-blue">Competição &amp; Liderança</span>
         <h3>Baja SAE MackGear</h3>
         <p>Liderança de equipe de 20 estudantes no desenvolvimento de veículo off-road, com análise estrutural FEA/NASTRAN, rigidez torcional e dimensionamento de suspensão.</p>
       </a>
 
-      <a href="projetos/tcc/" class="academic-card clickable fade-in">
+      <a href="projetos/tcc/index.html" class="academic-card clickable fade-in">
         <span class="academic-badge badge-purple">TCC · Mackenzie 2024</span>
         <h3>Impressão 3D no Baja SAE</h3>
         <p>Proposta de substituição de peças usinadas em alumínio por impressão 3D FDM/ABS, com otimização topológica no Ansys e validação por ensaios mecânicos.</p>
       </a>
 
-      <a href="projetos/tech/" class="academic-card clickable fade-in">
+      <a href="projetos/tech/index.html" class="academic-card clickable fade-in">
         <span class="academic-badge badge-green">Python &amp; Data Science</span>
         <h3>Projetos Tech</h3>
         <p>Notebooks Python com web scraping de notícias (BeautifulSoup), análise estatística descritiva e análise de sentimentos em português com SentiLex.</p>
@@ -566,7 +567,7 @@
         <span class="contact-card-label">Email</span>
         <span class="contact-card-value">guilherme.mb@hotmail.com</span>
       </a>
-      <a href="https://linkedin.com/in/barros-guilherme" target="_blank" class="contact-card">
+      <a href="https://linkedin.com/in/barros-guilherme" target="_blank" rel="noopener noreferrer" class="contact-card">
         <span class="contact-card-icon">💼</span>
         <span class="contact-card-label">LinkedIn</span>
         <span class="contact-card-value">barros-guilherme</span>
