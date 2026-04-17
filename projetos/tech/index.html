@@ -95,14 +95,13 @@
     .nb-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.2rem; }
     .nb-tag { padding: .2rem .65rem; border-radius: 999px; font-size: .75rem; font-weight: 500; background: var(--bg3); color: var(--muted); border: 1px solid var(--border); }
 
-    /* File download */
-    .files-grid { display: flex; flex-direction: column; gap: .8rem; margin-top: 1rem; }
-    .file-card { display: flex; align-items: center; gap: 1.2rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.4rem; text-decoration: none; color: var(--text); transition: all .2s; }
-    .file-card:hover { border-color: var(--accent); transform: translateX(4px); }
-    .file-icon { font-size: 1.6rem; flex-shrink: 0; }
-    .file-name { font-weight: 600; font-size: .92rem; }
-    .file-meta { color: var(--muted); font-size: .78rem; margin-top: .1rem; font-family: monospace; }
-    .file-arrow { margin-left: auto; color: var(--accent); font-size: 1rem; }
+    /* Notebook actions */
+    .nb-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.3rem; }
+    .nb-btn { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1.1rem; border-radius: 8px; font-size: .85rem; font-weight: 600; text-decoration: none; transition: transform .2s, box-shadow .2s, border-color .2s, color .2s; border: 1px solid transparent; cursor: pointer; }
+    .nb-btn-primary { background: var(--accent-grad); color: #fff; }
+    .nb-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(79,142,247,.3); }
+    .nb-btn-secondary { background: transparent; color: var(--text); border-color: var(--border); }
+    .nb-btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
     footer { text-align: center; padding: 2.5rem 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .82rem; }
 
@@ -194,6 +193,16 @@ soup = BeautifulSoup(response.text, <span class="code-str">'html.parser'</span>)
       <span class="nb-tag">HTML parsing</span>
       <span class="nb-tag">extração de dados</span>
     </div>
+    <div class="nb-actions">
+      <a href="https://nbviewer.org/github/guilhermemb1211-cloud/Portfolio/blob/main/projetos/tech/scraping_noticias.ipynb" target="_blank" rel="noopener" class="nb-btn nb-btn-primary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Abrir notebook
+      </a>
+      <a href="scraping_noticias.ipynb" download class="nb-btn nb-btn-secondary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Baixar .ipynb
+      </a>
+    </div>
   </div>
 
   <!-- Estatística Descritiva -->
@@ -236,6 +245,16 @@ sns.<span class="code-fn">boxplot</span>(data=df)</div>
       <span class="nb-tag">matplotlib</span>
       <span class="nb-tag">estatística</span>
       <span class="nb-tag">visualização de dados</span>
+    </div>
+    <div class="nb-actions">
+      <a href="https://nbviewer.org/github/guilhermemb1211-cloud/Portfolio/blob/main/projetos/tech/estatistica_descritiva_001.ipynb" target="_blank" rel="noopener" class="nb-btn nb-btn-primary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Abrir notebook
+      </a>
+      <a href="estatistica_descritiva_001.ipynb" download class="nb-btn nb-btn-secondary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Baixar .ipynb
+      </a>
     </div>
   </div>
 
@@ -282,37 +301,16 @@ sentilex = {}
       <span class="nb-tag">léxico</span>
       <span class="nb-tag">classificação de texto</span>
     </div>
-  </div>
-</section>
-
-<!-- DOWNLOAD DOS NOTEBOOKS -->
-<section>
-  <div class="section-title fade-in">Arquivos</div>
-  <div class="files-grid fade-in">
-    <a href="scraping_noticias.ipynb" download class="file-card">
-      <span class="file-icon">📓</span>
-      <div>
-        <div class="file-name">Web Scraping de Notícias</div>
-        <div class="file-meta">scraping_noticias.ipynb · Jupyter Notebook</div>
-      </div>
-      <span class="file-arrow">↓</span>
-    </a>
-    <a href="estatistica_descritiva_001.ipynb" download class="file-card">
-      <span class="file-icon">📓</span>
-      <div>
-        <div class="file-name">Estatística Descritiva</div>
-        <div class="file-meta">estatistica_descritiva_001.ipynb · Jupyter Notebook</div>
-      </div>
-      <span class="file-arrow">↓</span>
-    </a>
-    <a href="sentilex_roteiro_va_01.ipynb" download class="file-card">
-      <span class="file-icon">📓</span>
-      <div>
-        <div class="file-name">Análise de Sentimentos com SentiLex</div>
-        <div class="file-meta">sentilex_roteiro_va_01.ipynb · Jupyter Notebook</div>
-      </div>
-      <span class="file-arrow">↓</span>
-    </a>
+    <div class="nb-actions">
+      <a href="https://nbviewer.org/github/guilhermemb1211-cloud/Portfolio/blob/main/projetos/tech/sentilex_roteiro_va_01.ipynb" target="_blank" rel="noopener" class="nb-btn nb-btn-primary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Abrir notebook
+      </a>
+      <a href="sentilex_roteiro_va_01.ipynb" download class="nb-btn nb-btn-secondary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Baixar .ipynb
+      </a>
+    </div>
   </div>
 </section>
 
